@@ -545,4 +545,10 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  .prod {
+    width: 40%;
+  }
+}
+
 /*# sourceMappingURL=styles.css.map */

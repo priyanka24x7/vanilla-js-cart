@@ -101,9 +101,15 @@ function getData() {
         item.qty = item.qty + 1;
         item.total = item.price.display * item.qty;
         updateCart(data.items);
+        scrollToPage();
       });
       products.appendChild(card);
     });
+  });
+}
+function scrollToPage() {
+  document.body.scrollIntoView({
+    behavior: 'auto', block: 'end',
   });
 }
 getData();
