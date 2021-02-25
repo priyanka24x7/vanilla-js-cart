@@ -4,8 +4,7 @@
   "description": "Gulp setup",
   "scripts": {
     "start": "gulp start",
-    "build": "gulp build",
-    "postinstall": "npm run build"
+    "build": "gulp build"
   },
   "author": "Dare",
   "license": "ISC",
