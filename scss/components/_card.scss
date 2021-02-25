@@ -1,0 +1,134 @@
+.products {
+  .card {
+    margin-bottom: 20px;
+    border-radius: 4px;
+    position: relative;
+    margin: 10px;
+    border: 2px solid #ebe7e7;
+    img {
+      padding: 10px;
+      height: 200px;
+      width: 200px;
+      box-sizing: border-box;
+      margin: auto;
+      display: block;
+    }
+    .discount {
+      background: #37ea37;
+      color: #fff;
+      padding: 5px;
+      width: 30%;
+      font-weight: bold;
+      border-radius: 0 0 4px 4px;
+      position: absolute;
+    }
+    .name {
+      padding: 10px;
+      background: #ebe7e7;
+      color: #444;
+      font-size: 17px;
+      .flex {
+        padding: 10px 0;
+        .actual-p {
+          margin-right: 10px;
+          text-decoration: line-through;
+          text-decoration-color: red;
+        }
+        .display-p {
+          font-weight: bold;
+        }
+        button {
+          font-weight: bold;
+          border: 1px solid #7878e7;
+          background: white;
+          border-radius: 5px;
+          color: #7878e7;
+          padding: 6px;
+        }
+      }
+    }
+  }
+}
+
+#cart{
+    margin-top: 10px;
+    .cart-header{
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-top: 2px solid #ccc;
+        border-bottom: 2px solid #ccc;
+        padding: 10px 0;
+    }
+}
+.cart-item {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    .cart-item-qty{
+        button{
+            background: white;
+            border: 1px solid #999;
+            width: 30px;
+            height: 30px;
+            font-size: 17px;
+        }
+        span{
+            display: inline-block;
+            margin: 0 5px;
+        }
+    }
+  }
+
+  .flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .total-cart{
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    padding: 10px;
+    color: #999;
+    line-height: 27px;
+    label{
+        width: 200px;
+        display: inline-block;
+    }
+    .total-order{
+        background: #ebebeb;
+        color: #444;
+        font-weight: bold;
+        padding: 10px;
+        margin-top: 10px;
+        label{
+            font-weight: normal;
+        }
+    }
+  }
+  .prod{
+    align-items: center;
+    display: flex;
+    border: 1px solid #ccc;
+    padding: 8px;
+    .cart-item-name{
+        margin-left: 7px;
+    }
+  }
+
+  @media (min-width: 767px){
+      //Desktop
+      .products{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            .card{
+                width: 30%;
+            }
+      }
+  }
+
