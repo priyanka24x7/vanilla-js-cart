@@ -5,7 +5,7 @@
   "scripts": {
     "start": "gulp start",
     "build": "gulp build",
-    "postinstall": "gulp default"
+    "postinstall": "npm run build"
   },
   "author": "Dare",
   "license": "ISC",
