@@ -36,14 +36,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           updateCart(data);
         }
       });
-      calcTotal(filteredItem);
       cart.appendChild(cartItem);
     });
+    calcTotal(filteredItem);
   } // Calculate the total amount with discount
 
 
   function calcTotal(items) {
     var totalEl = document.getElementById("total-cart");
+    totalEl.innerHTML = '';
     var total = 0;
     var discountedTotal = 0;
     var totalDiscount = 0;
@@ -54,7 +55,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       discountedTotal += item.price.actual * item.qty;
     });
     totalDiscount = total - discountedTotal;
-    totalEl.innerHTML = "\n    <div class=\"total-cart\">\n      <label>Items(".concat(totalQty, ")</label>: ").concat(formatAmount(total), "<br/>\n      <label>Discount</label>: -").concat(formatAmount(totalDiscount), "\n      <div class=\"total-order\"><label>Order Total</label>: ").concat(formatAmount(discountedTotal), "</div>\n    </div> \n    ");
+
+    if (total) {
+      totalEl.innerHTML = "\n        <div class=\"total-cart\">\n          <label>Items(".concat(totalQty, ")</label>: ").concat(formatAmount(total), "<br/>\n          <label>Discount</label>: -").concat(formatAmount(totalDiscount), "\n          <div class=\"total-order\"><label>Order Total</label>: ").concat(formatAmount(discountedTotal), "</div>\n        </div> \n      ");
+    }
   } // Format price based on currency
 
 

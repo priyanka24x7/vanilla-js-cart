@@ -45,14 +45,15 @@
           updateCart(data);
         }
       });
-      calcTotal(filteredItem);
       cart.appendChild(cartItem);
     });
+    calcTotal(filteredItem);
   }
   
   // Calculate the total amount with discount
   function calcTotal(items) {
     let totalEl = document.getElementById("total-cart");
+    totalEl.innerHTML = '';
     let total = 0;
     let discountedTotal = 0;
     let totalDiscount = 0;
@@ -63,13 +64,15 @@
       discountedTotal += item.price.actual * item.qty;
     });
     totalDiscount = total - discountedTotal;
-    totalEl.innerHTML = `
-    <div class="total-cart">
-      <label>Items(${totalQty})</label>: ${formatAmount(total)}<br/>
-      <label>Discount</label>: -${formatAmount(totalDiscount)}
-      <div class="total-order"><label>Order Total</label>: ${formatAmount(discountedTotal)}</div>
-    </div> 
-    `;
+    if (total){
+      totalEl.innerHTML = `
+        <div class="total-cart">
+          <label>Items(${totalQty})</label>: ${formatAmount(total)}<br/>
+          <label>Discount</label>: -${formatAmount(totalDiscount)}
+          <div class="total-order"><label>Order Total</label>: ${formatAmount(discountedTotal)}</div>
+        </div> 
+      `;
+    }
   }
   
   // Format price based on currency
