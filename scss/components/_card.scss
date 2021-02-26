@@ -115,6 +115,7 @@
     display: flex;
     border: 1px solid #ccc;
     padding: 8px;
+    width: 40%;
     .cart-item-name{
         margin-left: 7px;
     }
@@ -129,12 +130,6 @@
             .card{
                 width: 30%;
             }
-      }
-  }
-
-  @media (max-width: 768px){
-      .prod{
-        width: 40%;
       }
   }
 

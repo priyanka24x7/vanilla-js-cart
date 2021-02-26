@@ -362,6 +362,10 @@ body {
   padding: 0 20px;
 }
 
+.hide {
+  display: none;
+}
+
 @media (min-width: 767px) {
   .wrapper {
     width: 90%;
@@ -523,6 +527,7 @@ body {
   display: flex;
   border: 1px solid #ccc;
   padding: 8px;
+  width: 40%;
 }
 
 .prod .cart-item-name {
@@ -542,12 +547,6 @@ body {
   }
   .products .card {
     width: 30%;
-  }
-}
-
-@media (max-width: 768px) {
-  .prod {
-    width: 40%;
   }
 }
 

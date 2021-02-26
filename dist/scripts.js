@@ -1,95 +1,127 @@
 "use strict";
 
-function updateCart(items) {
-  var cart = document.getElementById("cart");
-  cart.innerHTML = "";
-  var filteredItem = items.filter(function (el) {
-    return el.cart === true;
-  });
-  var cartHeader = document.createElement("div");
-  cartHeader.classList.add("cart-header");
-  cartHeader.innerHTML = "\n      <div class=\"flex\">\n        <div>Item</div>\n        <div>Qty</div>\n        <div>Price</div>\n      </div>\n    ";
-  cart.appendChild(cartHeader);
-  filteredItem.forEach(function (item) {
-    var cartItem = document.createElement("div");
-    cartItem.classList.add("cart-item");
-    cartItem.innerHTML = "\n      <div class=\"prod\">\n        <img class=\"cart-item-img\" src=\"".concat(item.image, "\">\n        <div class=\"cart-item-name\">").concat(item.name, "</div>\n      </div>\n      <div class=\"cart-item-qty\">\n        <button class=\"qty-remove\">-</button><span>").concat(item.qty, "</span><button class=\"qty-add\">+</button>\n      </div>\n      <div class=\"display-p\">").concat(formatAmount(item.total), "</div>\n    ");
-    cartItem.getElementsByClassName('qty-add')[0].addEventListener("click", function () {
-      item.qty = item.qty + 1;
-      item.total = item.price.actual * item.qty;
-      updateCart(items);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+(function () {
+  // Update Cart
+  function updateCart(data) {
+    setProductSession(data);
+    var cart = document.getElementById("cart");
+    cart.innerHTML = "";
+    var filteredItem = data.items.filter(function (el) {
+      return el.cart === true;
     });
-    cartItem.getElementsByClassName('qty-remove')[0].addEventListener("click", function () {
-      if (item.qty) {
-        item.qty = item.qty - 1;
+    var cartHeader = document.createElement("div");
+    cartHeader.classList.add("cart-header");
+    cartHeader.innerHTML = "\n      <div class=\"flex\">\n        <div>Item</div>\n        <div>Qty</div>\n        <div>Price</div>\n      </div>\n    ";
+    cart.appendChild(cartHeader);
+    filteredItem.forEach(function (item) {
+      var cartItem = document.createElement("div");
+      cartItem.classList.add("cart-item");
+      cartItem.innerHTML = "\n        <div class=\"prod\">\n          <img class=\"cart-item-img\" src=\"".concat(item.image, "\">\n          <div class=\"cart-item-name\">").concat(item.name, "</div>\n        </div>\n        <div class=\"cart-item-qty\">\n          <button class=\"qty-remove\">-</button><span>").concat(item.qty, "</span><button class=\"qty-add\">+</button>\n        </div>\n        <div class=\"display-p\">").concat(formatAmount(item.total), "</div>\n      ");
+      cartItem.getElementsByClassName("qty-add")[0].addEventListener("click", function () {
+        item.qty = item.qty + 1;
         item.total = item.price.actual * item.qty;
+        updateCart(data);
+      });
+      cartItem.getElementsByClassName("qty-remove")[0].addEventListener("click", function () {
+        if (item.qty) {
+          item.qty = item.qty - 1;
+          item.total = item.price.actual * item.qty;
 
-        if (item.qty === 0) {
-          item.cart = false;
+          if (item.qty === 0) {
+            item.cart = false;
+          }
+
+          updateCart(data);
         }
-
-        updateCart(items);
-      }
+      });
+      calcTotal(filteredItem);
+      cart.appendChild(cartItem);
     });
-    calcTotal(filteredItem);
-    cart.appendChild(cartItem);
-  });
-}
+  } // Calculate the total amount with discount
 
-function calcTotal(items) {
-  var totalEl = document.getElementById('total-cart');
-  var total = 0;
-  var discountedTotal = 0;
-  var totalDiscount = 0;
-  var totalQty = 0;
-  items.forEach(function (item) {
-    totalQty += item.qty;
-    total += item.price.display * item.qty;
-    discountedTotal += item.price.actual * item.qty;
-  });
-  totalDiscount = total - discountedTotal;
-  totalEl.innerHTML = "\n  <div class=\"total-cart\">\n    <label>Items(".concat(totalQty, ")</label>: ").concat(formatAmount(total), "<br/>\n    <label>Discount</label>: -").concat(formatAmount(totalDiscount), "\n    <div class=\"total-order\"><label>Order Total</label>: ").concat(formatAmount(discountedTotal), "</div>\n  </div> \n  ");
-}
 
-function formatAmount(value) {
-  var formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  });
-  return formatter.format(value);
-}
+  function calcTotal(items) {
+    var totalEl = document.getElementById("total-cart");
+    var total = 0;
+    var discountedTotal = 0;
+    var totalDiscount = 0;
+    var totalQty = 0;
+    items.forEach(function (item) {
+      totalQty += item.qty;
+      total += item.price.display * item.qty;
+      discountedTotal += item.price.actual * item.qty;
+    });
+    totalDiscount = total - discountedTotal;
+    totalEl.innerHTML = "\n    <div class=\"total-cart\">\n      <label>Items(".concat(totalQty, ")</label>: ").concat(formatAmount(total), "<br/>\n      <label>Discount</label>: -").concat(formatAmount(totalDiscount), "\n      <div class=\"total-order\"><label>Order Total</label>: ").concat(formatAmount(discountedTotal), "</div>\n    </div> \n    ");
+  } // Format price based on currency
 
-function getData() {
-  fetch("data/cart.json").then(function (response) {
-    return response.json();
-  }).then(function (data) {
+
+  function formatAmount(value) {
+    var formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    });
+    return formatter.format(value);
+  }
+
+  function scrollToPage() {
+    document.body.scrollIntoView(_defineProperty({
+      behavior: "auto",
+      block: "end"
+    }, "behavior", "smooth"));
+  } // Product list
+
+
+  function setProductList(data) {
     var products = document.getElementById("product-list");
     data.items.forEach(function (item, index) {
-      item.qty = 0;
+      var getProducts = JSON.parse(sessionStorage.getItem("products"));
+
+      if (!getProducts) {
+        item.qty = 0;
+      }
+
       var card = document.createElement("div");
       card.classList.add("card");
-      card.innerHTML = "\n        <div class=\"discount\">".concat(item.discount, "% off</div>\n        <img src=\"").concat(item.image, "\">\n        <div class=\"name\">\n          <div>").concat(item.name, "</div>\n          <div class=\"flex\">\n            <div class=\"price\">\n              <span class=\"actual-p\">").concat(formatAmount(item.price.display), "</span>\n              <span class=\"display-p\">").concat(formatAmount(item.price.actual), "</span>\n            </div>\n            <div><button type=\"button\" class=\"add-to-cart\">Add To Cart</button></div>\n          </div>\n        </div>\n      ");
-      card.getElementsByClassName('add-to-cart')[0].addEventListener("click", function () {
+      card.innerHTML = "\n      <div class=\"discount\">".concat(item.discount, "% off</div>\n      <img src=\"").concat(item.image, "\">\n      <div class=\"name\">\n        <div>").concat(item.name, "</div>\n        <div class=\"flex\">\n          <div class=\"price\">\n            <span class=\"actual-p\">").concat(formatAmount(item.price.display), "</span>\n            <span class=\"display-p\">").concat(formatAmount(item.price.actual), "</span>\n          </div>\n          <div><button type=\"button\" class=\"add-to-cart\">Add To Cart</button></div>\n        </div>\n      </div>\n    ");
+      card.getElementsByClassName("add-to-cart")[0].addEventListener("click", function () {
         item.cart = true;
         item.qty = item.qty + 1;
         item.total = item.price.display * item.qty;
-        updateCart(data.items);
+        updateCart(data);
         scrollToPage();
       });
       products.appendChild(card);
     });
-  });
-}
+  } // set product in session 
 
-function scrollToPage() {
-  document.body.scrollIntoView({
-    behavior: 'auto',
-    block: 'end'
-  });
-}
 
-getData();
+  function setProductSession(data) {
+    sessionStorage.setItem("products", JSON.stringify(data));
+  } // Get All products from json as mock api call
+
+
+  function getData() {
+    // check in session
+    var getProducts = JSON.parse(sessionStorage.getItem("products"));
+
+    if (getProducts) {
+      setProductList(getProducts);
+      updateCart(getProducts);
+    } else {
+      fetch("data/cart.json").then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        setProductList(data);
+      });
+    }
+  }
+
+  getData();
+})();
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
